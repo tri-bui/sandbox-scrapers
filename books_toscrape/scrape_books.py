@@ -13,8 +13,8 @@ browser.visit(site_url)
 book_soup = Soup(browser.html, 'html.parser')
 
 # Book data
-headings = 'upc,title,category,price,rating,num_reviews'
-headings += ',in_stock,num_available,url\n'
+headings = 'upc;title;category;price;rating;num_reviews'
+headings += ';in_stock;num_available;url\n'
 book_data = [headings]
 
 # Output file
@@ -63,7 +63,7 @@ while True:
         # Main product section
         try:
             p_main = page_soup.find('div', class_='product_main')
-            title = p_main.find('h1').text.replace(',', '\,')
+            title = p_main.find('h1')
             price = p_main.find('p', class_='price_color').text[1:]
             rating = p_main.find('p', class_='star-rating').attrs['class'][1]
         except:
@@ -87,8 +87,8 @@ while True:
             pass
 
         # Add book to data
-        book = f'{upc},{title},{category},{price},{rating},{num_reviews}'
-        book += f',{in_stock},{num_available},{url}\n'
+        book = f'{upc};{title};{category};{price};{rating};{num_reviews}'
+        book += f';{in_stock};{num_available};{url}\n'
         book_data.append(book)
 
         # Write row to file
