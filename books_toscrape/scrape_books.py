@@ -63,7 +63,7 @@ while True:
         # Main product section
         try:
             p_main = page_soup.find('div', class_='product_main')
-            title = p_main.find('h1')
+            title = p_main.find('h1').text
             price = p_main.find('p', class_='price_color').text[1:]
             rating = p_main.find('p', class_='star-rating').attrs['class'][1]
         except:
@@ -86,6 +86,12 @@ while True:
         except:
             pass
 
+        # Click back
+        if re.search(r'/page\-\d+\.', url):
+            continue
+        else:
+            browser.back()
+
         # Add book to data
         book = f'{upc};{title};{category};{price};{rating};{num_reviews}'
         book += f';{in_stock};{num_available};{url}\n'
@@ -94,10 +100,6 @@ while True:
         # Write row to file
         with open(outfile, 'a') as f:
             f.write(book)
-
-        # Click back
-        if not re.search(r'/page\-\d+\.', url):
-            browser.back()
 
     # Go to next page
     try:
