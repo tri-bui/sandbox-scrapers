@@ -50,7 +50,7 @@ while True:
             url = browser.url
             page_soup = Soup(browser.html, 'html.parser')
         except:
-            print('^^^^ Not found ^^^^')
+            print(' - Not found:', t)
             continue
 
         # Breadcrumb
@@ -58,7 +58,7 @@ while True:
             crumb = page_soup.find('ul', class_='breadcrumb').find_all('li')
             category = crumb[2].find('a').text
         except:
-            pass
+            print(' - Category missing')
 
         # Main product section
         try:
@@ -67,7 +67,7 @@ while True:
             price = p_main.find('p', class_='price_color').text[1:]
             rating = p_main.find('p', class_='star-rating').attrs['class'][1]
         except:
-            pass
+            print(' - Title/price/rating missing')
 
         # Stock availability
         try:
@@ -76,7 +76,7 @@ while True:
             in_stock = stock[0].strip()
             num_available = stock[1].split()[0]
         except:
-            pass
+            print(' - Stock/availability missing')
 
         # Product information
         try:
@@ -84,7 +84,7 @@ while True:
             upc = p_info.find('td').text
             num_reviews = p_info.find_all('td')[-1].text
         except:
-            pass
+            print(' - UPC/reviews missing')
 
         # Click back
         if re.search(r'/page\-\d+\.', url):
@@ -109,6 +109,7 @@ while True:
 
 
 # # Write data to file
+# f = open(outfile, 'a')
 # for book in book_data:
 #     f.write(book)
 # f.close()
