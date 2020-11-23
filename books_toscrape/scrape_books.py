@@ -3,7 +3,7 @@ from splinter import Browser
 from bs4 import BeautifulSoup as Soup
 
 
-# Initialize a browser
+# Initialize browser
 exe_path = '/usr/local/bin/chromedriver'
 browser = Browser('chrome', executable_path=exe_path, headless=False)
 
@@ -12,14 +12,14 @@ site_url = 'https://books.toscrape.com/'
 browser.visit(site_url)
 book_soup = Soup(browser.html, 'html.parser')
 
-# Book data
+# Data header
 headings = 'upc;title;category;price;rating;num_reviews'
 headings += ';in_stock;num_available;url\n'
-book_data = [headings]
+# book_data = [headings]
 
-# Output file
-outfile = 'book_data.csv'
-with open(outfile, 'a') as f:
+# Output heading to file
+outfile = 'books.csv'
+with open(outfile, 'w') as f:
     f.write(headings)
 
 # Book count
@@ -29,14 +29,21 @@ i = 0
 # Continue scraping for all pages
 while True:
 
-    # Get a list of book titles on the page
+    # Print current page
+    page_num = browser.url.split('/')[-1].replace('.html', '')
+    page_num = page_num.replace('-', ' ').upper()
+    page_num = page_num if 'PAGE' in page_num else 'PAGE 1'
+    print(' #', page_num, '#')
+
+    # List of book titles on the page
     book_soup = Soup(browser.html, 'html.parser')
     books = book_soup.find_all('article', class_='product_pod')
-    titles = [book.find('h3').find('a').text for book in books]
+    titles = [book.find('h3').get_text() for book in books]
     
     # For each book on the page
     for t in titles:
 
+        # Print book being scraped
         i += 1
         print(i, t)
 
@@ -44,7 +51,7 @@ while True:
         upc = title = category = price = rating = num_reviews = ''
         in_stock = num_available = url = '' 
 
-        # Go to the book's page and get the html
+        # Go to the book's page and parse the html
         try:
             browser.click_link_by_partial_text(t)
             url = browser.url
@@ -53,14 +60,13 @@ while True:
             print(' - Not found:', t)
             continue
 
-        # Breadcrumb
+        # Breadcrumb - category
         try:
-            crumb = page_soup.find('ul', class_='breadcrumb').find_all('li')
-            category = crumb[2].find('a').text
+            category = page_soup.select('ul.breadcrumb li')[2].find('a').text
         except:
             print(' - Category missing')
 
-        # Main product section
+        # Main product section - title, price, rating
         try:
             p_main = page_soup.find('div', class_='product_main')
             title = p_main.find('h1').text
@@ -69,16 +75,16 @@ while True:
         except:
             print(' - Title/price/rating missing')
 
-        # Stock availability
+        # Stock availability - in_stock, num_available
         try:
-            stock = p_main.find('p', class_='availability').text.strip()
-            stock = stock.split('(')
+            stock = page_soup.select_one('div.product_main p.availability')
+            stock = stock.text.strip().split('(')
             in_stock = stock[0].strip()
             num_available = stock[1].split()[0]
         except:
             print(' - Stock/availability missing')
 
-        # Product information
+        # Product information - upc, num_reviews
         try:
             p_info = page_soup.find('table')
             upc = p_info.find('td').text
@@ -87,24 +93,25 @@ while True:
             print(' - UPC/reviews missing')
 
         # Click back
-        if re.search(r'/page\-\d+\.', url):
+        if re.search(r'/page\-\d+\.', browser.url):
             continue
         else:
             browser.back()
 
-        # Add book to data
+        # Combine data variables into a row
         book = f'{upc};{title};{category};{price};{rating};{num_reviews}'
         book += f';{in_stock};{num_available};{url}\n'
-        book_data.append(book)
+        # book_data.append(book)
 
         # Write row to file
         with open(outfile, 'a') as f:
             f.write(book)
 
-    # Go to next page
+    # Go to next page or quit browser if no more pages
     try:
         browser.click_link_by_partial_text('next')
     except:
+        browser.quit()
         break
 
 
