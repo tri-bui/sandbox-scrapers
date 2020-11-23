@@ -43,17 +43,20 @@ while True:
     # For each book on the page
     for t in titles:
 
+        # Replace quotes in titles
+        t = t.replace('"', '')
+
         # Print book being scraped
         i += 1
         print(i, t)
 
         # Initialize data variables
         upc = title = category = price = rating = num_reviews = ''
-        in_stock = num_available = url = '' 
+        in_stock = num_available = url = ''
 
         # Go to the book's page and parse the html
         try:
-            browser.click_link_by_partial_text(t)
+            browser.links.find_by_partial_text(t).click()
             url = browser.url
             page_soup = Soup(browser.html, 'html.parser')
         except:
@@ -109,7 +112,7 @@ while True:
 
     # Go to next page or quit browser if no more pages
     try:
-        browser.click_link_by_partial_text('next')
+        browser.links.find_by_partial_text('next').click()
     except:
         browser.quit()
         break
