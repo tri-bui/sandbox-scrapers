@@ -24,7 +24,7 @@ def index():
 @app.route('/scrape')
 def scrape():
     mars = mongo.db.mars # Mars collection
-    mars_data = nasa_scraper.scrape_all(n_articles=3) # Scrape NASA site
+    mars_data = nasa_scraper.scrape_all() # Scrape NASA site
     mars.replace_one({}, mars_data, upsert=True) # Update data
     return index()
 

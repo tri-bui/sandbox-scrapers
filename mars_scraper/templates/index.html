@@ -23,7 +23,7 @@
     <div class="container">
 
         <!-- Banner -->
-        <div class="jumbotron text-center">
+        <div class="jumbotron text-center" id="mars-head">
             <h1>Mission to Mars</h1>
             <a class="btn btn-info btn-lg" href="scrape" role="button">
                 Update News
@@ -31,14 +31,14 @@
         </div>
 
         <!-- Latest news -->
-        <div class="panel panel-info">
+        <div class="panel panel-info" id="mars-news">
 
-            <!-- Heading -->
+            <!-- Panel heading -->
             <div class="panel-heading">
                 <h2>Latest Mars News</h2>
             </div>
 
-            <!-- Body -->
+            <!-- Panel body -->
             <div class="panel-body media">
                 <div class="media-body">
 
@@ -55,6 +55,22 @@
                     {% endfor %}
                 </div>
             </div>
+        </div>
+
+        <!-- Hemispheres -->
+        <div class="row text-center mb-5" id="mars-hemi">
+            <h2>Mars Hemispheres</h2>
+            {% for i in range(mars.hemisphere_names|length) %}
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <img class="img-responsive" 
+                            src={{mars.hemisphere_images[i]}} 
+                            alt={{mars.hemisphere_names[i] + ' Hemisphere'}}
+                        />
+                        <h4 class="caption">{{mars.hemisphere_names[i]}}</h4>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
 
         <!-- Image and facts-->
