@@ -16,7 +16,8 @@ def scrape_news(browser, url=news_url, n_articles=3,
                 article_html='ul.item_list li.slide'):
 
     '''
-    Scrape the title, summary, and link of the most recent articles at NASA's Mars news page.
+    Scrape the title, summary, and link of the most recent articles at NASA's 
+    Mars news page.
 
     Parameters
     ----------
@@ -65,12 +66,14 @@ def scrape_news(browser, url=news_url, n_articles=3,
 
 def scrape_hemis(browser, url=hemi_url):
     '''
-    Scrape the Mars hemisphere names and image links from the search results of the USGS website.
+    Scrape the Mars hemisphere names and image links from the search results 
+    of the USGS website.
 
     browser : Splinter WebDriver
         Automated browser for scraping
     url : str, optional
-        Website to scrape, by default 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+        Website to scrape, by default 
+        'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
 
     Returns
     -------
@@ -122,7 +125,8 @@ def scrape_img(browser, url=img_url):
     browser : Splinter WebDriver
         Automated browser for scraping
     url : str, optional
-        Website to scrape, by default 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
+        Website to scrape, by default 
+        'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
 
     Returns
     -------
@@ -157,7 +161,8 @@ def scrape_img(browser, url=img_url):
 def scrape_facts(url=facts_url):
 
     '''
-    Scrape the main facts table about Mars and Earth from the space-facts website.
+    Scrape the main facts table about Mars and Earth from the space-facts 
+    website.
 
     Parameters
     ----------
@@ -206,9 +211,11 @@ def scrape_all(headless=True, n_articles=3):
     Parameters
     ----------
     headless : bool, optional
-        Whether to perform the scraping without displaying the browser, by default True
+        Whether to perform the scraping without displaying the browser, by 
+        default True
     n_articles : int, optional
-        Number of articles to scrape, by default 3. This is a pass-through argument for the scrape_news function.
+        Number of articles to scrape, by default 3. This is a pass-through 
+        argument for the scrape_news function.
 
     Returns
     -------
@@ -248,4 +255,5 @@ def scrape_all(headless=True, n_articles=3):
 
 
 if __name__ == '__main__':
-    print(scrape_all(False))
+    # print(scrape_all(False))
+    print(hemi_url)
