@@ -15,7 +15,6 @@ book_soup = Soup(browser.html, 'html.parser')
 # Data header
 headings = 'upc;title;category;price;rating;num_reviews'
 headings += ';in_stock;num_available;url\n'
-# book_data = [headings]
 
 # Output heading to file
 outfile = 'books.csv'
@@ -104,7 +103,6 @@ while True:
         # Combine data variables into a row
         book = f'{upc};{title};{category};{price};{rating};{num_reviews}'
         book += f';{in_stock};{num_available};{url}\n'
-        # book_data.append(book)
 
         # Write row to file
         with open(outfile, 'a') as f:
@@ -116,10 +114,3 @@ while True:
     except:
         browser.quit()
         break
-
-
-# # Write data to file
-# f = open(outfile, 'a')
-# for book in book_data:
-#     f.write(book)
-# f.close()

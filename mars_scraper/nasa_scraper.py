@@ -66,8 +66,8 @@ def scrape_news(browser, url=news_url, n_articles=3,
 
 def scrape_hemis(browser, url=hemi_url):
     '''
-    Scrape the Mars hemisphere names and image links from the search results 
-    of the USGS website.
+    Scrape the Mars hemisphere names and image links from the search results of 
+    the USGS website.
 
     browser : Splinter WebDriver
         Automated browser for scraping
