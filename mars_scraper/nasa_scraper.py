@@ -15,7 +15,7 @@ facts_url = 'https://space-facts.com/'
 def scrape_news(browser, url=news_url, n_articles=3,
                 article_html='ul.item_list li.slide'):
 
-    '''
+    """
     Scrape the title, summary, and link of the most recent articles at NASA's 
     Mars news page.
 
@@ -34,7 +34,7 @@ def scrape_news(browser, url=news_url, n_articles=3,
     -------
     ndarray[n_articles, 3]
         Article names, summaries, and links
-    '''
+    """
 
     # Visit the site and allow 1 second for it to load
     browser.visit(url)
@@ -65,7 +65,8 @@ def scrape_news(browser, url=news_url, n_articles=3,
 
 
 def scrape_hemis(browser, url=hemi_url):
-    '''
+    
+    """
     Scrape the Mars hemisphere names and image links from the search results of 
     the USGS website.
 
@@ -81,7 +82,7 @@ def scrape_hemis(browser, url=hemi_url):
         Names of the 4 Mars hemispheres
     imgs : lst[str:4]
         Links to images of the 4 Mars hemispheres
-    '''
+    """
 
     # Visit the Mars hemisphere search results page
     browser.visit(url)
@@ -117,7 +118,7 @@ def scrape_hemis(browser, url=hemi_url):
 
 def scrape_img(browser, url=img_url):
 
-    '''
+    """
     Scrape the featured image in the Mars category of the NASA website.
 
     Parameters
@@ -132,7 +133,7 @@ def scrape_img(browser, url=img_url):
     -------
     str
         URL of the featured Mars image
-    '''
+    """
 
     # Visit the Mars images page
     browser.visit(url)
@@ -160,7 +161,7 @@ def scrape_img(browser, url=img_url):
 
 def scrape_facts(url=facts_url):
 
-    '''
+    """
     Scrape the main facts table about Mars and Earth from the space-facts 
     website.
 
@@ -173,7 +174,7 @@ def scrape_facts(url=facts_url):
     -------
     str
         HTML for the facts table
-    '''
+    """
 
     # Scrape Mars facts
     mars_url = url + 'mars/'
@@ -202,7 +203,7 @@ def scrape_facts(url=facts_url):
 
 def scrape_all(headless=True, n_articles=3):
 
-    '''
+    """
     Scrape the following from the NASA website:
         [1] Title and summary of the most recent Mars article
         [2] Featured Mars image
@@ -221,7 +222,7 @@ def scrape_all(headless=True, n_articles=3):
     -------
     dict{5}
         Scraped data and the date and time it was scraped
-    '''
+    """
 
     # Initialize browser
     exe_path = '/usr/local/bin/chromedriver'
