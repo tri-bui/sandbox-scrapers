@@ -1,10 +1,11 @@
+import csv
 import re
 from splinter import Browser
 from bs4 import BeautifulSoup as Soup
 
 
 # Initialize browser
-exe_path = '/usr/local/bin/chromedriver'
+exe_path = '/usr/local/bin/chromedriver' # chromedriver executable path
 browser = Browser('chrome', executable_path=exe_path, headless=False)
 
 # Visit the site and get the html
@@ -13,13 +14,14 @@ browser.visit(site_url)
 book_soup = Soup(browser.html, 'html.parser')
 
 # Data header
-headings = 'upc;title;category;price;rating;num_reviews'
-headings += ';in_stock;num_available;url\n'
+header = ['upc', 'title', 'category', 'price', 'rating', 'num_reviews', 
+           'in_stock', 'num_available', 'url']
 
 # Output heading to file
 outfile = 'books.csv'
 with open(outfile, 'w') as f:
-    f.write(headings)
+    writer = csv.writer(f, delimiter=';')
+    writer.writerow(header)
 
 # Book count
 i = 0
@@ -101,12 +103,13 @@ while True:
             browser.back()
 
         # Combine data variables into a row
-        book = f'{upc};{title};{category};{price};{rating};{num_reviews}'
-        book += f';{in_stock};{num_available};{url}\n'
+        book = [upc, title, category, price, rating, num_reviews, 
+                in_stock, num_available, url]
 
         # Write row to file
         with open(outfile, 'a') as f:
-            f.write(book)
+            writer = csv.writer(f, delimiter=';')
+            writer.writerow(book)
 
     # Go to next page or quit browser if no more pages
     try:
