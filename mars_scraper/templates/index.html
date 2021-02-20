@@ -30,12 +30,12 @@
 
         <!-- Banner -->
         <div class="jumbotron text-center" id="mars-head">
-            <h1 class="test-info">Mission to Mars</h1>
-            <p><a class="btn btn-info btn-lg" href="/scrape" role="button">Update News</a></p>
+            <h1>Mission to Mars</h1>
+            <p><a class="btn btn-danger btn-lg" href="/scrape" role="button">Update News</a></p>
         </div>
 
         <!-- Latest news -->
-        <div class="panel panel-info" id="mars-news">
+        <div class="panel panel-danger" id="mars-news">
 
             <!-- Panel heading -->
             <div class="panel-heading">
@@ -48,7 +48,7 @@
 
                     {% for i in range(mars.news_titles | length) %}
                         <h4 class="media-heading">
-                            <a href={{mars.news_links[i]}}>
+                            <a class="text-danger" href={{mars.news_links[i]}}>
                                 {{mars.news_titles[i]}}
                             </a>
                         </h4>
