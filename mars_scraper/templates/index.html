@@ -9,7 +9,8 @@
     <title>Mission to Mars</title>
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/3.4.1/spacelab/bootstrap.min.css" />
 
     <!-- Google font - Trispace -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -29,8 +30,8 @@
 
         <!-- Banner -->
         <div class="jumbotron text-center" id="mars-head">
-            <h1>Mission to Mars</h1>
-            <a class="btn btn-info btn-lg" href="/scrape" role="button">Update News</a>
+            <h1 class="test-info">Mission to Mars</h1>
+            <p><a class="btn btn-info btn-lg" href="/scrape" role="button">Update News</a></p>
         </div>
 
         <!-- Latest news -->
@@ -45,14 +46,14 @@
             <div class="panel-body media">
                 <div class="media-body">
 
-                    {% for i in range(mars.news_titles|length) %}
+                    {% for i in range(mars.news_titles | length) %}
                         <h4 class="media-heading">
                             <a href={{mars.news_links[i]}}>
                                 {{mars.news_titles[i]}}
                             </a>
                         </h4>
                         <p>{{mars.news_summaries[i]}}</p>
-                        {% if i + 1 < mars.news_titles|length %}
+                        {% if i + 1 < mars.news_titles | length %}
                             <hr />
                         {% endif %}
                     {% endfor %}
@@ -63,7 +64,7 @@
         <!-- Hemispheres -->
         <div class="row text-center mb-5" id="mars-hemi">
             <h2>Mars Hemispheres</h2>
-            {% for i in range(mars.hemisphere_names|length) %}
+            {% for i in range(mars.hemisphere_names | length) %}
                 <div class="col-md-3">
                     <div class="thumbnail">
                         <img class="img-responsive" 
