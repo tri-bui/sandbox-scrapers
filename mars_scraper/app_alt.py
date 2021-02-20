@@ -22,8 +22,8 @@ def index():
     """ Home page displaying all data """
 
     # Extract Mars data and render home page
-    mars_doc = mongo.db.mars.find_one() # 1st document in mars collection contains all data
-    return render_template('index.html', mars=mars_doc) # pass data to and render home page
+    last_doc = mongo.db.mars.find().sort([('last_modified', -1)]).limit(1) # last added document
+    return render_template('index.html', mars=last_doc) # pass data to and render home page
 
 
 @app.route('/scrape')
@@ -31,10 +31,8 @@ def scrape():
 
     """ Scrape new data, update database with new data, and refresh page """
 
-    mars = mongo.db.mars # Mars collection
     mars_data = mars_scraper.scrape_all() # scrape new data
-    mars.update({}, mars_data, upsert=True) # create or update mars collection with new data
-    # return index() # render home page
+    mongo.db.mars.insert(mars_data) # add new data to collection
     return redirect('/', code=302) # redirect to home page with updated data
 
 
