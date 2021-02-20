@@ -7,7 +7,7 @@ import mars_scraper
 app = Flask(__name__)
 
 # App's connection to MongoDB
-db_name = 'mars_db'
+db_name = 'mars'
 mongo_uri = 'mongodb://localhost:27017/' + db_name
 app.config['MONGO_URI'] = mongo_uri
 mongo = PyMongo(app)
