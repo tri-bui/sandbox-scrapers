@@ -1,23 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <!-- Metadata -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Mission to Mars</title>
 
     <!-- Bootstrap -->
-    <link 
-        rel="stylesheet" 
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
 
     <!-- Google font - Trispace -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link 
-        href="https://fonts.googleapis.com/css2?family=Trispace&display=swap" 
-        rel="stylesheet"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Trispace&display=swap" />
 
     <!-- Internal CSS -->
     <style>
@@ -34,9 +30,7 @@
         <!-- Banner -->
         <div class="jumbotron text-center" id="mars-head">
             <h1>Mission to Mars</h1>
-            <a class="btn btn-info btn-lg" href="scrape" role="button">
-                Update News
-            </a>
+            <a class="btn btn-info btn-lg" href="/scrape" role="button">Update News</a>
         </div>
 
         <!-- Latest news -->
@@ -83,7 +77,7 @@
         </div>
 
         <!-- Image and facts-->
-        <div class="row" id="mars-img-facts">
+        <div class="row" id="mars-feat">
 
             <!-- Featured image -->
             <div class="col-md-8" id="mars-img">
@@ -95,7 +89,7 @@
             </div>
 
             <!-- Facts table -->
-            <div class="col-md-4" id="mars-facts">
+            <div class="col-md-4" id="mars-fact">
                 <h2>Mars Facts</h2>
                 {{mars.facts | safe}}
             </div>
