@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup as Soup
 # URLs
 news_url = 'https://mars.nasa.gov/news/'
 hemi_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
-img_url = 'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
+img_url = 'https://www.jpl.nasa.gov/images?search=&category=Mars'
 facts_url = 'https://space-facts.com/'
 
 
@@ -26,13 +26,13 @@ def scrape_news(browser, url=news_url, n_articles=3,
     url : str, optional
         Website to scrape, by default 'https://mars.nasa.gov/news/'
     n_articles : int, optional
-        Number of articles to scrape
+        Number of articles to scrape, by default 3
     article_html : str, optional
         HTML element containing articles, by default 'ul.item_list li.slide'
 
     Returns
     -------
-    ndarray[n_articles, 3]
+    ndarray[`n_articles`, 3]
         Article names, summaries, and links
     """
 
@@ -43,7 +43,7 @@ def scrape_news(browser, url=news_url, n_articles=3,
     # Parse the HTML
     soup = Soup(browser.html, 'html.parser')
 
-    # Get the first n_articles articles
+    # Get the first `n_articles` articles
     try:
         # Articles
         articles = soup.select(article_html)
@@ -51,13 +51,13 @@ def scrape_news(browser, url=news_url, n_articles=3,
 
         # Get the title, summary, and link for each article
         for i in range(n_articles):
-            title = articles[i].select_one('div.content_title').get_text()
-            summary = articles[i].select_one('div.article_teaser_body').text
-            link = articles[i].select_one('div.content_title a').attrs['href']
-            link = url.replace('/news/', '') + link
+            title = articles[i].select_one('div.content_title').get_text().strip()
+            summary = articles[i].select_one('div.article_teaser_body').get_text().strip()
+            link = articles[i].select_one('div.content_title a').attrs['href'] # partial url
+            link = url.replace('/news/', '') + link # full url
             scraped.append([title, summary, link])
     except AttributeError:
-        return None, None
+        return None
 
     # Convert to arr
     scraped_arr = np.array(scraped)
