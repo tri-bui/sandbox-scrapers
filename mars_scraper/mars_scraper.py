@@ -12,8 +12,7 @@ img_url = 'https://www.jpl.nasa.gov/images?search=&category=Mars'
 facts_url = 'https://space-facts.com/'
 
 
-def scrape_news(browser, url=news_url, n_articles=3,
-                article_html='ul.item_list li.slide'):
+def scrape_news(browser, url=news_url, n_articles=3:
 
     """
     Scrape the title, summary, and link of the most recent articles at NASA's 
@@ -27,8 +26,6 @@ def scrape_news(browser, url=news_url, n_articles=3,
         Website to scrape, by default 'https://mars.nasa.gov/news/'
     n_articles : int, optional
         Number of articles to scrape, by default 3
-    article_html : str, optional
-        HTML element containing articles, by default 'ul.item_list li.slide'
 
     Returns
     -------
@@ -43,11 +40,11 @@ def scrape_news(browser, url=news_url, n_articles=3,
     try:
         # Visit the site
         browser.visit(url)
-        browser.is_element_present_by_css(article_html, 1) # allow 1s for loading
+        browser.is_element_present_by_css('ul.item_list li.slide', 1) # allow 1s for loading
 
         # Extract articles
         soup = Soup(browser.html, 'html.parser') # parse html
-        articles = soup.select(article_html)
+        articles = soup.select('ul.item_list li.slide')
 
         # Get the title, summary, and link for each article
         for i in range(n_articles):
