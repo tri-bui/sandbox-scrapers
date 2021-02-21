@@ -39,6 +39,7 @@ def scrape_news(browser, url=news_url, n_articles=3):
 
     # Scraped articles
     titles, summaries, links = [], [], []
+    print('Scraping Mars news articles...')
 
     try:
         # Visit the site
@@ -90,6 +91,7 @@ def scrape_hemis(browser, url=hemi_url):
 
     # Scraped names and image links
     names, imgs = [], []
+    print('Scraping Mars hemispheres...')
 
     try:
         # Visit the Mars hemisphere search results page
@@ -139,6 +141,7 @@ def scrape_first_img(browser, url=img_url):
 
     # Scraped image URL
     first_img = ''
+    print('Scraping most recent Mars image...')
 
     try:
         # Visit the Mars images page
@@ -180,6 +183,7 @@ def scrape_img(browser, url=img_url):
 
     # Scraped image URL
     main_img = ''
+    print('Scraping featured Mars image...')
 
     try:
         # Visit the Mars images page
@@ -229,6 +233,7 @@ def scrape_facts(url=facts_url):
     mars_url = url + 'mars/'
     earth_url = url + 'earth/'
     html = '' # html for the combined facts table
+    print('Scraping Mars and Earth facts...')
 
     # Scrape Mars and Earth facts
     try:
@@ -290,6 +295,7 @@ def scrape_all(headless=True, n_articles=3):
     names, images = scrape_hemis(browser)
     img = scrape_img(browser)
     facts = scrape_facts().replace('dataframe', table_classes)
+    print('Scraping complete.')
 
     # Store the scraped data into a dictionary
     data = {
