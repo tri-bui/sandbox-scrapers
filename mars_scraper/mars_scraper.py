@@ -12,7 +12,7 @@ img_url = 'https://www.jpl.nasa.gov/images?search=&category=Mars'
 facts_url = 'https://space-facts.com/'
 
 
-def scrape_news(browser, url=news_url, n_articles=3:
+def scrape_news(browser, url=news_url, n_articles=3):
 
     """
     Scrape the title, summary, and link of the most recent articles at NASA's 
@@ -138,7 +138,7 @@ def scrape_first_img(browser, url=img_url):
         browser.visit(img_url)
 
         # Click the most recent image in the search results
-        print(browser.is_element_present_by_css('section a.group', wait_time=1))
+        browser.is_element_present_by_css('section a.group', wait_time=1)
         browser.links.find_by_partial_href('images/').click()
 
         # Get the image URL
@@ -249,10 +249,11 @@ def scrape_facts(url=facts_url):
 def scrape_all(headless=True, n_articles=3):
 
     """
-    Scrape the following from the NASA website:
-        [1] Title and summary of the most recent Mars article
-        [2] Featured Mars image
-        [3] Main facts table about Mars
+    Scrape the following:
+        [1] Title, summary, and url of the most recent Mars articles
+        [2] Name and image url for each of the 4 Mars hemisphers
+        [3] URL for featured, or most recent, Mars image
+        [4] Main facts table about Mars and Earth
 
     Parameters
     ----------
@@ -261,15 +262,15 @@ def scrape_all(headless=True, n_articles=3):
         default True
     n_articles : int, optional
         Number of articles to scrape, by default 3. This is a pass-through 
-        argument for the scrape_news function.
+        argument for the `scrape_news` function.
 
     Returns
     -------
-    dict{5}
+    dict{8}
         Scraped data and the date and time it was scraped
     """
 
-    # Initialize browser
+    # Start browser
     exe_path = '/usr/local/bin/chromedriver'
     browser = Browser('chrome', executable_path=exe_path, headless=headless)
 
@@ -301,5 +302,4 @@ def scrape_all(headless=True, n_articles=3):
 
 
 if __name__ == '__main__':
-    # print(scrape_all(False))
-    print(hemi_url)
+    print(scrape_all(headless=False))
