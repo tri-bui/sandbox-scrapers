@@ -36,7 +36,6 @@ def scrape_news(browser, url=news_url, n_articles=3:
     # Scraped articles
     scraped = []
 
-    # Scrape the first `n_articles` articles
     try:
         # Visit the site
         browser.visit(url)
@@ -85,12 +84,11 @@ def scrape_hemis(browser, url=hemi_url):
     # Hemisphere names and image links
     names, imgs = [], []
 
-    # Scrape all 4 hemispheres
     try:
         # Visit the Mars hemisphere search results page
         browser.visit(url)    
     
-        # Get the name and image url for each hemisphere
+        # Get the name and image url for all 4 hemispheres
         for i in range(4): # 4 hemispheres
             # Visit hemisphere page
             browser.is_element_present_by_css('div.description a.product-item', 1) # 1s delay
@@ -113,10 +111,10 @@ def scrape_hemis(browser, url=hemi_url):
     return names, imgs
 
 
-def scrape_img(browser, url=img_url):
-
+def scrape_first_img(browser, url=img_url):
+    
     """
-    Scrape the featured image in the Mars category of the NASA website.
+    Scrape the most recent image in the Mars category of the NASA website.
 
     Parameters
     ----------
@@ -124,7 +122,7 @@ def scrape_img(browser, url=img_url):
         Automated browser for scraping
     url : str, optional
         Website to scrape, by default 
-        'https://www.jpl.nasa.gov/spaceimages/?search=&category=Mars'
+        'https://www.jpl.nasa.gov/images?search=&category=Mars'
 
     Returns
     -------
@@ -132,26 +130,73 @@ def scrape_img(browser, url=img_url):
         URL of the featured Mars image
     """
 
-    # Visit the Mars images page
-    browser.visit(url)
+    # First image URL
+    first_img = ''
 
-    # Click the full image button on the featured image
-    browser.is_element_present_by_css('a#full_image', 1)
-    browser.links.find_by_partial_text('FULL IMAGE').click()
-
-    # Click the more info buttom in the slide show
-    browser.is_element_present_by_css('div.buttons a.button', 1)
-    browser.links.find_by_partial_text('more info').click()
-
-    # Parse the HTML
-    soup = Soup(browser.html, 'html.parser')
-
-    # Get the URL of the main image on the page
     try:
+        # Visit the Mars images page
+        browser.visit(img_url)
+
+        # Click the most recent image in the search results
+        print(browser.is_element_present_by_css('section a.group', wait_time=1))
+        browser.links.find_by_partial_href('images/').click()
+
+        # Get the image URL
+        img_soup = Soup(browser.html, 'html.parser')
+        first_img = img_soup.find('img', class_='BaseImage').attrs['src']
+
+    except BaseException as E:
+        print('Error in scraping image:', E)
+
+    return first_img
+
+
+def scrape_img(browser, url=img_url):
+
+    """
+    Scrape the featured image in the Mars category of the NASA website. If 
+    there is no featured image, scrape the most recent image.
+
+    Parameters
+    ----------
+    browser : Splinter WebDriver
+        Automated browser for scraping
+    url : str, optional
+        Website to scrape, by default 
+        'https://www.jpl.nasa.gov/images?search=&category=Mars'
+
+    Returns
+    -------
+    str
+        URL of the featured Mars image
+    """
+
+    # Featured image URL
+    main_img = ''
+
+    try:
+        # Visit the Mars images page
+        browser.visit(url)
+
+        # Click the full image button on the featured image
+        browser.is_element_present_by_css('a#full_image', 1)
+        browser.links.find_by_partial_text('FULL IMAGE').click()
+
+        # Click the more info buttom in the slide show
+        browser.is_element_present_by_css('div.buttons a.button', 1)
+        browser.links.find_by_partial_text('more info').click()
+
+        # Parse the HTML
+        browser.is_element_present_by_css('figure.lede a img', 1)
+        soup = Soup(browser.html, 'html.parser')
+
+        # Get the URL of the main image on the page
         main_img = soup.select_one('figure.lede a img').get('src')
         main_img = 'https://www.jpl.nasa.gov' + main_img
-    except AttributeError:
-        return None
+
+    except BaseException as E:
+        print('Error in scraping featured image:', E)
+        main_img = scrape_first_img(browser)
 
     return main_img
 
