@@ -36,28 +36,29 @@ def scrape_news(browser, url=news_url, n_articles=3,
         Article names, summaries, and links
     """
 
-    # Visit the site and allow 1 second for it to load
-    browser.visit(url)
-    browser.is_element_present_by_css(article_html, 1)
+    # Scraped articles
+    scraped = []
 
-    # Parse the HTML
-    soup = Soup(browser.html, 'html.parser')
-
-    # Get the first `n_articles` articles
+    # Scrape the first `n_articles` articles
     try:
-        # Articles
+        # Visit the site
+        browser.visit(url)
+        browser.is_element_present_by_css(article_html, 1) # allow 1s for loading
+
+        # Extract articles
+        soup = Soup(browser.html, 'html.parser') # parse html
         articles = soup.select(article_html)
-        scraped = []
 
         # Get the title, summary, and link for each article
         for i in range(n_articles):
-            title = articles[i].select_one('div.content_title').get_text().strip()
-            summary = articles[i].select_one('div.article_teaser_body').get_text().strip()
+            title = articles[i].select_one('div.content_title').text.strip()
+            summary = articles[i].select_one('div.article_teaser_body').text.strip()
             link = articles[i].select_one('div.content_title a').attrs['href'] # partial url
             link = url.replace('/news/', '') + link # full url
             scraped.append([title, summary, link])
-    except AttributeError:
-        return None
+
+    except BaseException as E:
+        print('Error in scraping news:', E)
 
     # Convert to arr
     scraped_arr = np.array(scraped)
@@ -84,34 +85,33 @@ def scrape_hemis(browser, url=hemi_url):
         Links to images of the 4 Mars hemispheres
     """
 
-    # Visit the Mars hemisphere search results page
-    browser.visit(url)
-    
-    
     # Hemisphere names and image links
     names, imgs = [], []
 
     # Scrape all 4 hemispheres
     try:
+        # Visit the Mars hemisphere search results page
+        browser.visit(url)    
+    
+        # Get the name and image url for each hemisphere
         for i in range(4): # 4 hemispheres
-
             # Visit hemisphere page
-            browser.is_element_present_by_css(
-                'div.description a.product-item', 1) # 1s delay
-            hemisphere = browser.links.find_by_partial_text(
-                'Hemisphere Enhanced')[i] # page link
+            browser.is_element_present_by_css('div.description a.product-item', 1) # 1s delay
+            hemisphere = browser.links.find_by_partial_text('Hemisphere Enhanced')[i] # page link
             hemisphere.click() # click hemisphere page
+            browser.is_element_present_by_css('div.downloads a', 1)
             soup = Soup(browser.html, 'html.parser') # parse HTML
 
-            # Scrape hemisphere name and image link
+            # Add hemisphere name and image link to scraped lists
             img = soup.select_one('div.downloads a').attrs['href']
-            name = soup.select_one('section.metadata h2.title').text
-            name = name.split(' Hemisphere')[0]
+            name = soup.select_one('section.metadata h2.title').text.strip()
+            name = name.split(' Hemisphere')[0] # filter for hemisphere name
             names.append(name)
             imgs.append(img)
-            browser.back() # click back to search results
-    except AttributeError:
-        return None, None
+            browser.back() # back to search results
+
+    except BaseException as E:
+        print('Error in scraping Mars hemispheres:', E)
 
     return names, imgs
 
