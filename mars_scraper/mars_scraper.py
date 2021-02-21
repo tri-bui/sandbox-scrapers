@@ -196,7 +196,7 @@ def scrape_img(browser, url=img_url):
 
     except BaseException as E:
         print('Error in scraping featured image:', E)
-        main_img = scrape_first_img(browser)
+        main_img = scrape_first_img(browser) # scrape first image instead
 
     return main_img
 
@@ -218,28 +218,31 @@ def scrape_facts(url=facts_url):
         HTML for the facts table
     """
 
-    # Scrape Mars facts
+    # URL for facts tables
     mars_url = url + 'mars/'
-    try:
-        df = pd.read_html(mars_url)[0]
-        df.columns = ['Description', 'Mars']
-    except BaseException:
-        return None
-
-    # Scrape Earth facts
     earth_url = url + 'earth/'
+    html = '' # html for the combined facts table
+
+    # Scrape Mars and Earth facts
     try:
+        # Get Mars facts
+        mars_df = pd.read_html(mars_url)[0]
+        mars_df.columns = ['Description', 'Mars']
+
+        # Get earth facts
         earth_df = pd.read_html(earth_url)[0]
         earth_df.columns = ['Description', 'Earth']
-    except BaseException:
-        return None
 
-    # Merge data
-    df = pd.merge(df, earth_df, on='Description').set_index('Description')
-    df.index.name = None
+        # Merge data
+        df = pd.merge(mars_df, earth_df, on='Description').set_index('Description')
+        df.index.name = None
 
-    # Convert the df to HTML
-    html = df.to_html()
+        # Convert the df to HTML
+        html = df.to_html()
+
+    except BaseException as E:
+        print('Error in scraping Mars and Earth facts:', E)
+
     return html
 
 
