@@ -29,12 +29,16 @@ def scrape_news(browser, url=news_url, n_articles=3):
 
     Returns
     -------
-    ndarray[`n_articles`, 3]
-        Article names, summaries, and links
+    list[str]
+        Titles of the most recent articles
+    list[str]
+        Summaries of the most recent articles
+    list[str]
+        Links of the most recent articles
     """
 
     # Scraped articles
-    scraped = []
+    titles, summaries, links = [], [], []
 
     try:
         # Visit the site
@@ -51,14 +55,17 @@ def scrape_news(browser, url=news_url, n_articles=3):
             summary = articles[i].select_one('div.article_teaser_body').text.strip()
             link = articles[i].select_one('div.content_title a').attrs['href'] # partial url
             link = url.replace('/news/', '') + link # full url
-            scraped.append([title, summary, link])
+            
+            # Add all 3 to scraped lists
+            titles.append(title)
+            summaries.append(summary)
+            links.append(link)
 
     except BaseException as E:
         print('Error in scraping news:', E)
 
     # Convert to arr
-    scraped_arr = np.array(scraped)
-    return scraped_arr
+    return titles, summaries, links
 
 
 def scrape_hemis(browser, url=hemi_url):
@@ -81,7 +88,7 @@ def scrape_hemis(browser, url=hemi_url):
         Links to images of the 4 Mars hemispheres
     """
 
-    # Hemisphere names and image links
+    # Scraped names and image links
     names, imgs = [], []
 
     try:
@@ -130,7 +137,7 @@ def scrape_first_img(browser, url=img_url):
         URL of the featured Mars image
     """
 
-    # First image URL
+    # Scraped image URL
     first_img = ''
 
     try:
@@ -171,7 +178,7 @@ def scrape_img(browser, url=img_url):
         URL of the featured Mars image
     """
 
-    # Featured image URL
+    # Scraped image URL
     main_img = ''
 
     try:
@@ -279,16 +286,16 @@ def scrape_all(headless=True, n_articles=3):
 
     # Call all scraping functions
     time = dt.datetime.now()
-    titles, summaries, links = scrape_news(browser, n_articles=n_articles).T
+    titles, summaries, links = scrape_news(browser, n_articles=n_articles)
     names, images = scrape_hemis(browser)
     img = scrape_img(browser)
     facts = scrape_facts().replace('dataframe', table_classes)
 
     # Store the scraped data into a dictionary
     data = {
-        'news_titles': list(titles),
-        'news_summaries': list(summaries),
-        'news_links': list(links),
+        'news_titles': titles,
+        'news_summaries': summaries,
+        'news_links': links,
         'hemisphere_names': names,
         'hemisphere_images': images,
         'featured_image': img,
