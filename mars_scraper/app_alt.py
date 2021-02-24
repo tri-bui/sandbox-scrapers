@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect
 from flask_pymongo import PyMongo
 import mars_scraper
 
@@ -23,7 +23,10 @@ def index():
 
     # Extract Mars data and render home page
     last_doc = mongo.db.mars.find().sort([('last_modified', -1)]).limit(1) # last added document
-    return render_template('index.html', mars=last_doc) # pass data to and render home page
+    try:
+        return render_template('index.html', mars=last_doc[0]) # pass data to and render home page
+    except:
+        return scrape() # scrape data if database is empty
 
 
 @app.route('/scrape')
@@ -32,8 +35,8 @@ def scrape():
     """ Scrape new data, update database with new data, and refresh page """
 
     mars_data = mars_scraper.scrape_all() # scrape new data
-    mongo.db.mars.insert(mars_data) # add new data to collection
-    return redirect('/', code=302) # redirect to home page with updated data
+    mongo.db.mars.insert_one(mars_data) # add new data to collection
+    return index() # redirect to home page with updated data
 
 
 if __name__ == '__main__':
