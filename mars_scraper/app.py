@@ -7,7 +7,7 @@ import mars_scraper
 app = Flask(__name__)
 
 # App's connection to MongoDB
-db_name = 'mars_db'
+db_name = 'mars'
 mongo_uri = 'mongodb://localhost:27017/' + db_name
 app.config['MONGO_URI'] = mongo_uri
 mongo = PyMongo(app)
@@ -23,7 +23,10 @@ def index():
 
     # Extract Mars data and render home page
     mars_doc = mongo.db.mars.find_one() # 1st document in mars collection contains all data
-    return render_template('index.html', mars=mars_doc) # pass data to and render home page
+    if mars_doc is not None:
+        return render_template('index.html', mars=mars_doc) # pass data to and render home page
+    else:
+        return scrape() # Scrape data if database is empty
 
 
 @app.route('/scrape')
