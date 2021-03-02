@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect
 from flask_pymongo import PyMongo
-import mars_scraper
+import scraper
 
 
 # Flask app
@@ -34,7 +34,7 @@ def scrape():
 
     """ Scrape new data, update database with new data, and refresh page """
 
-    mars_data = mars_scraper.scrape_all() # scrape new data
+    mars_data = scraper.scrape_all() # scrape new data
     mongo.db.mars.insert_one(mars_data) # add new data to collection
     return index() # redirect to home page with updated data
 
