@@ -62,7 +62,7 @@ def scrape_news(browser, url=news_url, n_articles=3):
             summaries.append(summary)
             links.append(link)
 
-    except BaseException as E:
+    except Exception as E:
         print('Error in scraping news:', E)
 
     # Convert to arr
@@ -114,7 +114,7 @@ def scrape_hemis(browser, url=hemi_url):
             imgs.append(img)
             browser.back() # back to search results
 
-    except BaseException as E:
+    except Exception as E:
         print('Error in scraping Mars hemispheres:', E)
 
     return names, imgs
@@ -155,7 +155,7 @@ def scrape_first_img(browser, url=img_url):
         img_soup = Soup(browser.html, 'html.parser')
         first_img = img_soup.find('img', class_='BaseImage').attrs['src']
 
-    except BaseException as E:
+    except Exception as E:
         print('Error in scraping image:', E)
 
     return first_img
@@ -205,7 +205,7 @@ def scrape_img(browser, url=img_url):
         main_img = soup.select_one('figure.lede a img').get('src')
         main_img = 'https://www.jpl.nasa.gov' + main_img
 
-    except BaseException as E:
+    except Exception as E:
         print('Error in scraping featured image:', E)
         main_img = scrape_first_img(browser) # scrape first image instead
 
@@ -252,7 +252,7 @@ def scrape_facts(url=facts_url):
         # Convert the df to HTML
         html = df.to_html()
 
-    except BaseException as E:
+    except Exception as E:
         print('Error in scraping Mars and Earth facts:', E)
 
     return html
