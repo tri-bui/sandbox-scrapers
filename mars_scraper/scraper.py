@@ -63,9 +63,8 @@ def scrape_news(browser, url=news_url, n_articles=3):
             links.append(link)
 
     except Exception as E:
-        print('Error in scraping news:', E)
+        print('Failed to scrape news:', E)
 
-    # Convert to arr
     return titles, summaries, links
 
 
@@ -115,7 +114,7 @@ def scrape_hemis(browser, url=hemi_url):
             browser.back() # back to search results
 
     except Exception as E:
-        print('Error in scraping Mars hemispheres:', E)
+        print('Failed to scrape hemispheres:', E)
 
     return names, imgs
 
@@ -156,7 +155,7 @@ def scrape_first_img(browser, url=img_url):
         first_img = img_soup.find('img', class_='BaseImage').attrs['src']
 
     except Exception as E:
-        print('Error in scraping image:', E)
+        print('Failed to scrape image:', E)
 
     return first_img
 
@@ -206,7 +205,7 @@ def scrape_img(browser, url=img_url):
         main_img = 'https://www.jpl.nasa.gov' + main_img
 
     except Exception as E:
-        print('Error in scraping featured image:', E)
+        print('Failed to scrape featured image:', E)
         main_img = scrape_first_img(browser) # scrape first image instead
 
     return main_img
@@ -253,7 +252,7 @@ def scrape_facts(url=facts_url):
         html = df.to_html()
 
     except Exception as E:
-        print('Error in scraping Mars and Earth facts:', E)
+        print('Failed to scrape facts:', E)
 
     return html
 
