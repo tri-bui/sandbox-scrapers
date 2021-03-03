@@ -38,22 +38,20 @@
         <div class="panel panel-danger" id="mars-news">
 
             <!-- Panel heading -->
-            <div class="panel-heading">
-                <h2>Latest Mars News</h2>
-            </div>
+            <div class="panel-heading"><h2>Latest News</h2></div>
 
             <!-- Panel body -->
             <div class="panel-body media">
                 <div class="media-body">
 
-                    {% for i in range(mars.news_titles | length) %}
+                    {% for i in range(mars.news_titles|length) %}
                         <h4 class="media-heading">
                             <a class="text-danger" href={{mars.news_links[i]}}>
                                 {{mars.news_titles[i]}}
                             </a>
                         </h4>
                         <p>{{mars.news_summaries[i]}}</p>
-                        {% if i + 1 < mars.news_titles | length %}
+                        {% if i + 1 < mars.news_titles|length %}
                             <hr />
                         {% endif %}
                     {% endfor %}
@@ -63,13 +61,13 @@
 
         <!-- Hemispheres -->
         <div class="row text-center mb-5" id="mars-hemi">
-            <h2>Mars Hemispheres</h2>
-            {% for i in range(mars.hemisphere_names | length) %}
+            <h2>Hemispheres</h2>
+            {% for i in range(mars.hemisphere_names|length) %}
                 <div class="col-md-3">
                     <div class="thumbnail">
                         <img class="img-responsive" 
-                            src={{mars.hemisphere_images[i]}} 
-                            alt={{mars.hemisphere_names[i] + ' Hemisphere'}}
+                             src={{mars.hemisphere_images[i]}} 
+                             alt={{mars.hemisphere_names[i]+" Hemisphere"}}
                         />
                         <h4 class="caption">{{mars.hemisphere_names[i]}}</h4>
                     </div>
@@ -78,11 +76,11 @@
         </div>
 
         <!-- Image and facts-->
-        <div class="row" id="mars-feat">
+        <div class="row mb-5" id="mars-feat">
 
             <!-- Featured image -->
             <div class="col-md-8" id="mars-img">
-                <h2>Featured Mars Image</h2>
+                <h2>Featured Image</h2>
                 <img class="img-responsive" 
                      src={{mars.featured_image}} 
                      alt="Mars featured image" 
@@ -91,8 +89,8 @@
 
             <!-- Facts table -->
             <div class="col-md-4" id="mars-fact">
-                <h2>Mars Facts</h2>
-                {{mars.facts | safe}}
+                <h2>Profile</h2>
+                {{mars.facts|safe}}
             </div>
         </div>
     </div>
