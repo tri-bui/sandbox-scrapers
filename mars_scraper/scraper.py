@@ -42,11 +42,10 @@ def scrape_news(browser, url=news_url, n_articles=3):
     print('Scraping Mars news articles...')
 
     try:
-        # Visit the site
-        browser.visit(url)
-        browser.is_element_present_by_css('ul.item_list li.slide', 1) # allow 1s for loading
+        browser.visit(url) # visit the site
 
         # Extract articles
+        browser.is_element_present_by_css('ul.item_list li.slide', 1) # allow 1s for loading
         soup = Soup(browser.html, 'html.parser') # parse html
         articles = soup.select('ul.item_list li.slide')
 
@@ -93,25 +92,18 @@ def scrape_hemis(browser, url=hemi_url):
     print('Scraping Mars hemispheres...')
 
     try:
-        # Visit the Mars hemisphere search results page
-        browser.visit(url)    
-    
-        # Get the name and image url for all 4 hemispheres
         for i in range(4): # 4 hemispheres
-            # Visit hemisphere page
-            browser.is_element_present_by_css('div.description a.product-item', 1) # 1s delay
-            hemisphere = browser.links.find_by_partial_text('Hemisphere Enhanced')[i] # page link
-            hemisphere.click() # click hemisphere page
+            browser.visit(url) # visit the Mars hemisphere search results page
+            browser.is_element_present_by_css('div.description a.product-item', 1)
+            browser.links.find_by_partial_text('Hemisphere Enhanced')[i].click() # click hemisphere page
             browser.is_element_present_by_css('div.downloads a', 1)
-            soup = Soup(browser.html, 'html.parser') # parse HTML
+            soup = Soup(browser.html, 'html.parser') # parse html
 
-            # Add hemisphere name and image link to scraped lists
-            img = soup.select_one('div.downloads a').attrs['href']
+            # Get the hemisphere name and image link
             name = soup.select_one('section.metadata h2.title').text.strip()
-            name = name.split(' Hemisphere')[0] # filter for hemisphere name
-            names.append(name)
+            img = soup.select_one('div.downloads a').attrs['href']
+            names.append(name.split(' Hemisphere')[0])
             imgs.append(img)
-            browser.back() # back to search results
 
     except Exception as E:
         print('Failed to scrape hemispheres:', E)
@@ -143,8 +135,7 @@ def scrape_first_img(browser, url=img_url):
     print('Scraping most recent Mars image...')
 
     try:
-        # Visit the Mars images page
-        browser.visit(img_url)
+        browser.visit(img_url) # visit the Mars images page
 
         # Click the most recent image in the search results
         browser.is_element_present_by_css('section a.group', wait_time=1)
@@ -185,8 +176,7 @@ def scrape_img(browser, url=img_url):
     print('Scraping featured Mars image...')
 
     try:
-        # Visit the Mars images page
-        browser.visit(url)
+        browser.visit(url) # visit the Mars images page
 
         # Click the full image button on the featured image
         browser.is_element_present_by_css('a#full_image', 1)
@@ -200,15 +190,15 @@ def scrape_img(browser, url=img_url):
         browser.is_element_present_by_css('figure.lede a img', 1)
         soup = Soup(browser.html, 'html.parser')
 
-        # Get the URL of the main image on the page
-        main_img = soup.select_one('figure.lede a img').get('src')
-        main_img = 'https://www.jpl.nasa.gov' + main_img
+        # Get the URL of the featured image on the page
+        feat_img = soup.select_one('figure.lede a img').get('src')
+        feat_img = 'https://www.jpl.nasa.gov' + feat_img
 
     except Exception as E:
         print('Failed to scrape featured image:', E)
-        main_img = scrape_first_img(browser) # scrape first image instead
+        feat_img = scrape_first_img(browser) # scrape first image instead
 
-    return main_img
+    return feat_img
 
 
 def scrape_facts(url=facts_url):
@@ -234,22 +224,19 @@ def scrape_facts(url=facts_url):
     html = '' # html for the combined facts table
     print('Scraping Mars and Earth facts...')
 
-    # Scrape Mars and Earth facts
     try:
         # Get Mars facts
         mars_df = pd.read_html(mars_url)[0]
         mars_df.columns = ['Description', 'Mars']
 
-        # Get earth facts
+        # Get Earth facts
         earth_df = pd.read_html(earth_url)[0]
         earth_df.columns = ['Description', 'Earth']
 
         # Merge data
         df = pd.merge(mars_df, earth_df, on='Description').set_index('Description')
-        df.index.name = None
-
-        # Convert the df to HTML
-        html = df.to_html()
+        df.index.name = None # remove index name
+        html = df.to_html() # convert the df to html
 
     except Exception as E:
         print('Failed to scrape facts:', E)
@@ -285,7 +272,7 @@ def scrape_all(headless=True, n_articles=3):
     exe_path = '/usr/local/bin/chromedriver'
     browser = Browser('chrome', executable_path=exe_path, headless=headless)
 
-    # Bootstrap table classes to apply to facts table
+    # Bootstrap classes to apply to facts table
     table_classes = 'table table-striped table-bordered'
 
     # Call all scraping functions
