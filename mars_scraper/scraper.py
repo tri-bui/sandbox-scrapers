@@ -295,7 +295,7 @@ def scrape_all(headless=True, n_articles=3):
     names, images = scrape_hemis(browser)
     img = scrape_img(browser)
     facts = scrape_facts().replace('dataframe', table_classes)
-    print('Scraping complete.')
+    print('Scraping complete -', time)
 
     # Store the scraped data into a dictionary
     data = {
