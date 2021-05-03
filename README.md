@@ -1,2 +1,2 @@
-# sandbox-scrapers
+# Sandbox Scrapers
 Sandbox for webscraping
